@@ -5,7 +5,7 @@ module.exports = {
     extend: {},
   },
   presets: [],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'media', // or 'media' or 'class'
   theme: {
     screens: {
       sm: '600px',
