@@ -33,6 +33,7 @@ module.exports = {
         900: '#212121',
         A100: '#E1E1E6',
         A300: '#A8A8B3',
+        A800: '#29292E',
         A900: '#121214',
       },
       red: {
@@ -910,6 +911,11 @@ module.exports = {
       8: '3.2rem',
       9: '3.6rem',
       10: '4rem',
+      11: '4.4rem',
+      12: '4.8rem',
+      13: '5.2rem',
+      14: '5.6rem',
+      15: '6.2rem',
     },
     listStyleType: {
       none: 'none',
