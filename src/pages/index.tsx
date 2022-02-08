@@ -8,8 +8,8 @@ const Home: FunctionComponent = () => {
       <Head>
         <title>Início | ig.news</title>
       </Head>
-      <div className="bg-black w-full h-screen flex justify-center items-center font-sans">
-        <h1 className="text-20 text-white">Hello world</h1>
+      <div>
+        <h1 className="text-20 text-yellow-A500">Hello world</h1>
       </div>
     </>
   );
