@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react';
 import { FaGithub } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 
-const SignInButton: FunctionComponent = () => {
+export const SignInButton: FunctionComponent = () => {
   const isUserLoggedIn = true;
 
   if (isUserLoggedIn)
@@ -21,5 +21,3 @@ const SignInButton: FunctionComponent = () => {
     </button>
   );
 };
-
-export default SignInButton;

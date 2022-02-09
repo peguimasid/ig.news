@@ -2,11 +2,11 @@ import { FunctionComponent } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 
-import SignInButton from '../SignInButton';
+import { SignInButton } from '../SignInButton';
 
 import styles from './styles.module.scss';
 
-const Header: FunctionComponent = () => {
+export const Header: FunctionComponent = () => {
   return (
     <header className="h-52 border border-grey-800">
       <div className="flex items-center max-w-lg h-52 mx-auto px-20">
@@ -35,5 +35,3 @@ const Header: FunctionComponent = () => {
     </header>
   );
 };
-
-export default Header;
