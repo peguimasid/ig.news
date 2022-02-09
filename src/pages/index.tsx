@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 import { stripe } from '../services/stripe';
 
@@ -52,7 +52,7 @@ const Home: FunctionComponent<HomeProps> = ({ amount, priceId }) => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const price = await stripe.prices.retrieve('price_1KRO1yEOFAGk2toh4CSsiLyh');
 
   return {
@@ -60,5 +60,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       priceId: price.id,
       amount: price.unit_amount / 100,
     },
+    revalidate: 60 * 60 * 24, // 24 hours
   };
 };
