@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import { FunctionComponent } from 'react';
+import { SubscribeButton } from '../components/SubscribeButton';
 
 const Home: FunctionComponent = () => {
   return (
@@ -22,12 +23,16 @@ const Home: FunctionComponent = () => {
               For $9.90 month
             </span>
           </p>
+          <div className="mt-24">
+            <SubscribeButton />
+          </div>
         </section>
         <Image
           src="/images/avatar.svg"
           alt="Girl coding"
-          width="400"
-          height="400"
+          width="500"
+          height="500"
+          loading="eager"
         />
       </main>
     </>
