@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 
 export const Header: FunctionComponent = () => {
   return (
-    <header className="h-52 border border-grey-800">
+    <header className="h-52 border border-b-grey-800 shadow">
       <div className="flex items-center max-w-lg h-52 mx-auto px-20">
         <Image src="/images/logo.svg" alt="ig.news" width="110" height="31" />
         <nav className="ml-52 h-52">
