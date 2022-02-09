@@ -1,10 +1,21 @@
 import Head from 'next/head';
 import Image from 'next/image';
 
+import { GetServerSideProps } from 'next';
+
+import { stripe } from '../services/stripe';
+
 import { FunctionComponent } from 'react';
 import { SubscribeButton } from '../components/SubscribeButton';
 
-const Home: FunctionComponent = () => {
+import { formatPrice } from '../utils/formatPrice';
+
+interface HomeProps {
+  priceId: string;
+  amount: number;
+}
+
+const Home: FunctionComponent<HomeProps> = ({ amount, priceId }) => {
   return (
     <>
       <Head>
@@ -20,11 +31,11 @@ const Home: FunctionComponent = () => {
           <p className="text-15 leading-6 mt-16">
             Get access to all the publications <br />
             <span className="text-cyan-A500 font-semibold">
-              For $9.90 month
+              For {formatPrice(amount)} month
             </span>
           </p>
           <div className="mt-24">
-            <SubscribeButton />
+            <SubscribeButton priceId={priceId} />
           </div>
         </section>
         <Image
@@ -40,3 +51,14 @@ const Home: FunctionComponent = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const price = await stripe.prices.retrieve('price_1KRO1yEOFAGk2toh4CSsiLyh');
+
+  return {
+    props: {
+      priceId: price.id,
+      amount: price.unit_amount / 100,
+    },
+  };
+};
