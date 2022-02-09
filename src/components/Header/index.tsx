@@ -2,6 +2,8 @@ import { FunctionComponent } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 
+import SignInButton from '../SignInButton';
+
 import styles from './styles.module.scss';
 
 const Header: FunctionComponent = () => {
@@ -26,6 +28,9 @@ const Header: FunctionComponent = () => {
             Posts
           </a>
         </nav>
+        <div className="ml-auto">
+          <SignInButton />
+        </div>
       </div>
     </header>
   );
