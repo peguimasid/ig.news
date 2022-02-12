@@ -1,15 +1,42 @@
-import { FunctionComponent } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { FunctionComponent, useCallback, useMemo, useState } from 'react';
+import { api } from '../../services/api';
+import { getStripe } from '../../services/stripe-js';
 
-interface SubscribeButtonProps {
-  priceId: string;
-}
+export const SubscribeButton: FunctionComponent = () => {
+  const [subscribing, setSubscribing] = useState(false);
+  const { data, status } = useSession();
 
-export const SubscribeButton: FunctionComponent<SubscribeButtonProps> = ({
-  priceId,
-}) => {
-  console.log(priceId);
+  const isUserLoggedIn = useMemo(() => {
+    return status === 'authenticated';
+  }, [status]);
+
+  const handleSubscribe = useCallback(async () => {
+    if (!isUserLoggedIn) return signIn('github');
+    setSubscribing(true);
+
+    try {
+      const response = await api.post('/subscribe');
+      const { sessionId } = response.data;
+      const stripe = await getStripe();
+
+      await stripe.redirectToCheckout({ sessionId });
+    } catch (err) {
+      alert(err.message);
+    }
+    setSubscribing(false);
+  }, [isUserLoggedIn]);
+
+  const subscribeButtonDisabled = useMemo(() => {
+    return subscribing;
+  }, [subscribing]);
+
   return (
-    <button className="w-160 h-40 rounded-20 bg-yellow-A500 text-grey-A900 text-13 font-semibold flex items-center justify-center hover:brightness-75 transition">
+    <button
+      onClick={handleSubscribe}
+      disabled={subscribeButtonDisabled}
+      className="w-160 h-40 rounded-20 bg-yellow-A500 text-grey-A900 text-13 font-semibold flex items-center justify-center hover:brightness-75 transition disabled:bg-grey-700 disabled:brightness-100"
+    >
       Subscribe
     </button>
   );
