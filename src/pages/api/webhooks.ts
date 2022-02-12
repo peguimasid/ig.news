@@ -4,6 +4,7 @@ import { Readable } from 'stream';
 
 import Stripe from 'stripe';
 import { stripe } from '../../services/stripe';
+import { saveSubscription } from './_lib/manageSubscription';
 
 const buffer = async (readable: Readable) => {
   const chunks: Buffer[] = [];
@@ -42,7 +43,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (relevantEvents.has(event.type)) {
-      console.log('Evento recebido', event);
+      try {
+        switch (event.type) {
+          case 'checkout.session.completed':
+            const { subscription, customer } = event.data
+              .object as Stripe.Checkout.Session;
+            await saveSubscription(
+              subscription.toString(),
+              customer.toString()
+            );
+            break;
+          default:
+            throw new Error(`Unhandled event type: ${event.type}`);
+        }
+      } catch (err) {
+        return res.json({ error: 'Webkooh handler failed' });
+      }
     }
 
     res.json({ received: true });
