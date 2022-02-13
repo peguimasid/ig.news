@@ -35,7 +35,7 @@ const Home: FunctionComponent<HomeProps> = ({ amount, priceId }) => {
             </span>
           </p>
           <div className="mt-24">
-            <SubscribeButton priceId={priceId} />
+            <SubscribeButton />
           </div>
         </section>
         <Image

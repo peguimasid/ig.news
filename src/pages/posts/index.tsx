@@ -1,6 +1,10 @@
 import { FunctionComponent } from 'react';
 
 import Head from 'next/head';
+import { GetStaticProps } from 'next';
+
+import Prismic from '@prismicio/client';
+import { getPrismicClient } from '../../services/prismic';
 
 const Posts: FunctionComponent = () => {
   return (
@@ -37,3 +41,22 @@ const Posts: FunctionComponent = () => {
 };
 
 export default Posts;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+
+  const response = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'post')],
+    {
+      fetch: ['post.title', 'post.content'],
+      pageSize: 100,
+    }
+  );
+
+  console.log(response);
+
+  return {
+    props: {},
+    revalidate: 60 * 60, // 1 hour
+  };
+};
