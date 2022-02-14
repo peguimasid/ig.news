@@ -4,9 +4,22 @@ import Head from 'next/head';
 import { GetStaticProps } from 'next';
 
 import Prismic from '@prismicio/client';
+import { RichText } from 'prismic-dom';
 import { getPrismicClient } from '../../services/prismic';
 
-const Posts: FunctionComponent = () => {
+interface IPost {
+  slug: number;
+  title: string;
+  excerpt: string;
+  updatedAt: string;
+}
+
+interface PostsPageProps {
+  posts: IPost[];
+}
+
+const Posts: FunctionComponent<PostsPageProps> = ({ posts }) => {
+  console.log(posts);
   return (
     <>
       <Head>
@@ -15,22 +28,20 @@ const Posts: FunctionComponent = () => {
 
       <main className="max-w-lg mx-auto px-20">
         <div className="max-w-sm mt-48 mx-auto">
-          {[1, 2, 3].map((item) => (
+          {posts.map(({ slug, title, excerpt, updatedAt }) => (
             <a
-              key={item}
+              key={slug}
               href="#"
               className="block mt-20 pt-20 border-t-1 border-t-grey-A700 first:mt-0 first:p-0 first:border-0 group"
             >
               <time className="text-10 flex items-center text-grey-A300">
-                12 de março de 2021
+                {updatedAt}
               </time>
               <strong className="block text-15 mt-10 leading-5 group-hover:text-yellow-A500 transition">
-                Create a monorepo with Lerna & Yarn worksparces
+                {title}
               </strong>
-              <p className="text-grey-A300 mt-5 leading-4">
-                Protocolos e diretrizes orientam o desenvolvimento de
-                tecnologias acessíveis, mas é preciso olhar para além de tudo
-                isso
+              <p className="text-grey-A300 mt-5 leading-4 group-hover:text-grey-A500 transition">
+                {excerpt}
               </p>
             </a>
           ))}
@@ -45,7 +56,7 @@ export default Posts;
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
-  const response = await prismic.query(
+  const response = await prismic.query<any>(
     [Prismic.Predicates.at('document.type', 'post')],
     {
       fetch: ['post.title', 'post.content'],
@@ -53,10 +64,25 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   );
 
-  console.log(response);
+  const posts = response.results.map(({ uid, data, last_publication_date }) => {
+    return {
+      slug: uid,
+      title: RichText.asText(data.title),
+      excerpt:
+        data.content.find((content) => content.type === 'paragraph')?.text ??
+        '',
+      updatedAt: new Date(last_publication_date).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      }),
+    };
+  });
 
   return {
-    props: {},
+    props: {
+      posts,
+    },
     revalidate: 60 * 60, // 1 hour
   };
 };
