@@ -19,7 +19,6 @@ interface PostsPageProps {
 }
 
 const Posts: FunctionComponent<PostsPageProps> = ({ posts }) => {
-  console.log(posts);
   return (
     <>
       <Head>
