@@ -1,4 +1,5 @@
 import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 import { api } from '../../services/api';
 import { getStripe } from '../../services/stripe-js';
@@ -6,6 +7,7 @@ import { getStripe } from '../../services/stripe-js';
 export const SubscribeButton: FunctionComponent = () => {
   const [subscribing, setSubscribing] = useState(false);
   const { data, status } = useSession();
+  const router = useRouter();
 
   const isUserLoggedIn = useMemo(() => {
     return status === 'authenticated';
@@ -13,6 +15,8 @@ export const SubscribeButton: FunctionComponent = () => {
 
   const handleSubscribe = useCallback(async () => {
     if (!isUserLoggedIn) return signIn('github');
+    if (data.user.subscriptionStatus === 'active') return router.push('/posts');
+
     setSubscribing(true);
 
     try {
@@ -25,7 +29,7 @@ export const SubscribeButton: FunctionComponent = () => {
       alert(err.message);
     }
     setSubscribing(false);
-  }, [isUserLoggedIn]);
+  }, [data, isUserLoggedIn, router]);
 
   const subscribeButtonDisabled = useMemo(() => {
     return subscribing;
