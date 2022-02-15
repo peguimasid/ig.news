@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react';
 
 import Head from 'next/head';
+import Link from 'next/link';
 import { GetStaticProps } from 'next';
 
 import Prismic from '@prismicio/client';
@@ -28,21 +29,19 @@ const Posts: FunctionComponent<PostsPageProps> = ({ posts }) => {
       <main className="max-w-lg mx-auto px-20">
         <div className="max-w-sm mt-48 mx-auto">
           {posts.map(({ slug, title, excerpt, updatedAt }) => (
-            <a
-              key={slug}
-              href="#"
-              className="block mt-20 pt-20 border-t-1 border-t-grey-A700 first:mt-0 first:p-0 first:border-0 group"
-            >
-              <time className="text-10 flex items-center text-grey-A300">
-                {updatedAt}
-              </time>
-              <strong className="block text-15 mt-10 leading-5 group-hover:text-yellow-A500 transition">
-                {title}
-              </strong>
-              <p className="text-grey-A300 mt-5 leading-4 group-hover:text-grey-A500 transition">
-                {excerpt}
-              </p>
-            </a>
+            <Link key={slug} href={`/posts/${slug}`}>
+              <a className="block mt-20 pt-20 border-t-1 border-t-grey-A700 first:mt-0 first:p-0 first:border-0 group">
+                <time className="text-10 flex items-center text-grey-A300">
+                  {updatedAt}
+                </time>
+                <strong className="block text-15 mt-10 leading-5 group-hover:text-yellow-A500 transition">
+                  {title}
+                </strong>
+                <p className="text-grey-A300 mt-5 leading-4 group-hover:text-grey-A500 transition">
+                  {excerpt}
+                </p>
+              </a>
+            </Link>
           ))}
         </div>
       </main>
