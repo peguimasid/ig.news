@@ -29,7 +29,7 @@ const Posts: FunctionComponent<PostsPageProps> = ({ posts }) => {
       <main className="max-w-lg mx-auto px-20">
         <div className="max-w-sm mt-48 mx-auto">
           {posts.map(({ slug, title, excerpt, updatedAt }) => (
-            <Link key={slug} href={`/posts/${slug}`}>
+            <Link key={slug} href={`/posts/preview/${slug}`}>
               <a className="block mt-20 pt-20 border-t-1 border-t-grey-A700 first:mt-0 first:p-0 first:border-0 group">
                 <time className="text-10 flex items-center text-grey-A300">
                   {updatedAt}
